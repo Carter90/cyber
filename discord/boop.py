@@ -22,6 +22,7 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     print(f'{client.user} has awoken!')
+    await client.change_presence(status=discord.Status.online, activity=discord.Game("type !run to see commands"))
 
 
 @client.event
@@ -66,7 +67,6 @@ async def on_message(message):
                 await channel.delete()
     if 'purgatory' in [channel.name for channel in message.guild.channels]:
           #Will delete all messages and encode them to b64
-            print(message.content)
             if message.author != client.user:
               await message.delete()
               message_bytes = message.content.encode('ascii')
