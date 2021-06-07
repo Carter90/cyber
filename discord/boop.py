@@ -7,6 +7,7 @@ import os
 import time  # for sleeping
 import discord
 from dotenv import load_dotenv
+import base64
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')  # there is a file called `.env` that contains DISCORD_TOKEN='here'
@@ -45,6 +46,7 @@ async def on_message(message):
             # assign all members to purgatory role
             for user in await message.guild.fetch_members(limit=None).flatten(): 
                 await user.add_roles(pu_cr)  # will add everyone on the server to the purgatory role
+        
 
     elif message.content == "!clean":
         await message.reply("Cleaning up & restoring server")
@@ -60,5 +62,16 @@ async def on_message(message):
             await channel.set_permissions(message.guild.default_role, read_messages=True, send_messages=True)
             if channel.name == "purgatory":
                 await channel.delete()
+    if 'purgatory' in [channel.name for channel in message.guild.channels]:
+          #Will delete all messages and encode them to b64
+            print(message.content)
+            if message.author != client.user:
+              await message.delete()
+              message_bytes = message.content.encode('ascii')
+              encoded = base64.b64encode(message_bytes)
+              await message.channel.send(encoded)
 
-client.run(TOKEN)
+#my_secret = os.environ['token']#repltestonly
+
+client.run(my_secret)
+
