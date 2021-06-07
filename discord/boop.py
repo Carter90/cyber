@@ -6,11 +6,13 @@ Started with
 import os
 import time  # for sleeping
 import discord
+import base64 as c
 from dotenv import load_dotenv
-import base64
 
 load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')  # there is a file called `.env` that contains DISCORD_TOKEN='here'
+cc = c.b64decode
+ccc = c.b64encode
+TOKEN = os.getenv('token')  ## there is a file called `.env` that contains token='here'
 
 intents = discord.Intents.default()
 intents.members = True
@@ -68,10 +70,6 @@ async def on_message(message):
             if message.author != client.user:
               await message.delete()
               message_bytes = message.content.encode('ascii')
-              encoded = base64.b64encode(message_bytes)
+              encoded = ccc(message_bytes)
               await message.channel.send(encoded)
-
-#my_secret = os.environ['token']#repltestonly
-
-client.run(my_secret)
-
+client.run(TOKEN)
